@@ -1,0 +1,469 @@
+<title>Turing Robotics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: technical-drawing page — hero text left with a kinematic arm diagram right, two product lines as asymmetric spec panels, a numbered process, then the quote form. Left-aligned throughout. */
+/* Brand: monochrome (manual de marca Turing Robotics) — white/black with the four-wheel isotype; ROS axis colors appear only inside the technical drawing. */
+:root {
+  --paper: #FFFFFF;
+  --surface: #F3F3F3;
+  --ink: #000000;
+  --muted: #5E5E5E;
+  --line: #D6D6D6;
+  --grid: #E9E9E9;
+  --accent: #000000;
+  --accent-ink: #FFFFFF;
+  --logo-filter: none;
+  --x: #C8382F;  /* ROS frame axis colors: X red */
+  --y: #2E8B3E;  /* Y green */
+  --z: #2C5FB8;  /* Z blue */
+  --ok: #1F7A4D;
+  --err: #B3261E;
+  --display: "Poppins", "Segoe UI", Arial, sans-serif;
+  --body: "Poppins", "Segoe UI", Roboto, Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --radius: 4px;
+  --maxw: 1120px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #000000; --surface: #111111; --ink: #FFFFFF; --muted: #A3A3A3;
+    --line: #2B2B2B; --grid: #161616; --accent: #FFFFFF; --accent-ink: #000000; --logo-filter: invert(1);
+    --x: #F0675C; --y: #5CC46E; --z: #6E9CF2; --ok: #5CC48A; --err: #F2867E;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #000000; --surface: #111111; --ink: #FFFFFF; --muted: #A3A3A3;
+  --line: #2B2B2B; --grid: #161616; --accent: #FFFFFF; --accent-ink: #000000; --logo-filter: invert(1);
+  --x: #F0675C; --y: #5CC46E; --z: #6E9CF2; --ok: #5CC48A; --err: #F2867E;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
+.wrap { max-width: var(--maxw); margin: 0 auto; padding-inline: clamp(16px, 4vw, 40px); }
+
+/* Header */
+.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--line);
+}
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+.brand img { display: block; height: 40px; width: auto; filter: var(--logo-filter); }
+.brand .word { display: flex; flex-direction: column; line-height: 1; border-left: 1px solid var(--ink); padding-left: 10px; }
+.brand .word b { font-family: var(--display); font-weight: 700; font-size: 1.15rem; letter-spacing: .01em; }
+.brand .word small { font-family: var(--display); font-weight: 400; font-size: .56rem; letter-spacing: .42em; margin-top: 3px; }
+.nav { display: flex; align-items: center; gap: 22px; }
+.nav a.link { color: var(--muted); text-decoration: none; font-size: .95rem; }
+.nav a.link:hover { color: var(--ink); }
+@media (max-width: 720px) { .nav a.link { display: none; } }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: var(--body); font-weight: 600; font-size: .98rem;
+  padding: 11px 18px; border-radius: var(--radius); border: 1px solid transparent;
+  text-decoration: none; cursor: pointer;
+}
+.btn-primary { background: var(--accent); color: var(--accent-ink); }
+.btn-primary:hover { filter: brightness(1.08); }
+.btn-ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+.btn-ghost:hover { border-color: var(--ink); }
+
+/* Hero */
+.hero { padding-block: clamp(40px, 7vw, 88px) clamp(32px, 5vw, 64px); }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: clamp(24px, 4vw, 56px); align-items: center; }
+@media (max-width: 860px) { .hero .wrap { grid-template-columns: 1fr; } }
+.hero h1 {
+  font-family: var(--display); font-weight: 600; text-transform: uppercase;
+  font-size: clamp(2rem, 4.4vw, 3.4rem); line-height: 1.06; letter-spacing: -.01em;
+  margin: 0 0 20px; text-wrap: balance;
+}
+.hero p.lead { font-size: 1.08rem; font-weight: 300; color: var(--muted); max-width: 34em; margin: 0 0 28px; }
+.hero .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.where { margin-top: 28px; font-size: .92rem; color: var(--muted); }
+
+/* Kinematic drawing */
+.drawing {
+  position: relative; min-width: 0;
+  background:
+    linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 24px 24px,
+    var(--surface);
+  border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 12px;
+}
+.drawing svg { display: block; width: 100%; height: auto; }
+.drawing figcaption {
+  display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  border-top: 1px solid var(--line); margin-top: 8px; padding-top: 8px;
+  font-family: var(--mono); font-size: .74rem; color: var(--muted);
+}
+.k-link { stroke: var(--ink); stroke-width: 7; stroke-linecap: round; fill: none; }
+.k-joint { fill: var(--surface); stroke: var(--ink); stroke-width: 2.5; }
+.k-base { fill: var(--ink); }
+.k-dim { stroke: var(--muted); stroke-width: 1; fill: none; stroke-dasharray: 3 3; }
+.k-arc { stroke: var(--muted); stroke-width: 1.6; fill: none; }
+.k-label { font-family: var(--mono); font-size: 13px; fill: var(--muted); }
+.k-theta { font-family: var(--mono); font-size: 14px; fill: var(--ink); font-weight: 500; }
+.ax-x { stroke: var(--x); stroke-width: 2.5; } .ax-y { stroke: var(--y); stroke-width: 2.5; } .ax-z { stroke: var(--z); stroke-width: 2.5; }
+.hx { fill: var(--x); } .hy { fill: var(--y); } .hz { fill: var(--z); }
+.arm { transform-origin: 160px 300px; }
+@media (prefers-reduced-motion: no-preference) {
+  .arm-upper { animation: sway 7s ease-in-out infinite alternate; transform-origin: 160px 300px; transform-box: view-box; }
+  .arm-fore { animation: sway2 7s ease-in-out infinite alternate; transform-origin: 250px 168px; transform-box: view-box; }
+  @keyframes sway { from { transform: rotate(-3deg); } to { transform: rotate(4deg); } }
+  @keyframes sway2 { from { transform: rotate(5deg); } to { transform: rotate(-6deg); } }
+}
+
+/* Sections */
+section { padding-block: clamp(48px, 7vw, 88px); }
+.section-head { max-width: 40em; margin-bottom: 36px; }
+h2 {
+  font-family: var(--display); font-weight: 500; text-transform: uppercase;
+  font-size: clamp(1.6rem, 3vw, 2.3rem); line-height: 1.1; letter-spacing: 0;
+  margin: 0 0 12px; text-wrap: balance;
+}
+h3 { font-family: var(--display); font-weight: 600; font-size: 1.35rem; line-height: 1.2; margin: 0 0 10px; text-wrap: balance; }
+.section-head p { color: var(--muted); margin: 0; font-size: 1.05rem; }
+.rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
+
+/* Product lines */
+.lines { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 20px; }
+@media (max-width: 860px) { .lines { grid-template-columns: 1fr; } }
+.line-panel {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: clamp(22px, 3vw, 34px); display: flex; flex-direction: column; gap: 18px; min-width: 0;
+}
+.line-panel .tag { font-size: .85rem; color: var(--muted); }
+.line-panel p { margin: 0; color: var(--muted); }
+.spec { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border-top: 1px solid var(--line); }
+.spec li { display: grid; grid-template-columns: 9.5em minmax(0, 1fr); gap: 14px; padding: 11px 0; border-bottom: 1px solid var(--line); font-size: .96rem; }
+.spec li span:first-child { color: var(--muted); }
+@media (max-width: 480px) { .spec li { grid-template-columns: 1fr; gap: 2px; } }
+.line-panel .foot { font-size: .88rem; color: var(--muted); margin-top: auto; }
+
+/* Process */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border-top: 2px solid var(--ink); }
+@media (max-width: 860px) { .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .steps { grid-template-columns: 1fr; } }
+.steps li { padding: 18px 20px 4px 0; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.steps .n { font-family: var(--display); font-weight: 600; font-size: 1.6rem; color: var(--accent); line-height: 1; }
+.steps b { font-weight: 600; font-size: 1.04rem; }
+.steps p { margin: 0; color: var(--muted); font-size: .95rem; }
+
+/* Reasons */
+.reasons { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+@media (max-width: 860px) { .reasons { grid-template-columns: 1fr; } }
+.reasons div { min-width: 0; }
+.reasons b { display: block; margin-bottom: 6px; font-size: 1.04rem; }
+.reasons p { margin: 0; color: var(--muted); font-size: .96rem; }
+
+/* Quote */
+.quote { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.quote .wrap { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(24px, 5vw, 64px); }
+@media (max-width: 860px) { .quote .wrap { grid-template-columns: 1fr; } }
+.contact-alt { display: grid; gap: 14px; margin-top: 24px; font-size: .96rem; }
+.contact-alt span { display: block; color: var(--muted); font-size: .85rem; }
+.contact-alt a, .contact-alt strong { font-weight: 600; color: var(--ink); text-decoration: none; user-select: all; }
+form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 18px; }
+@media (max-width: 560px) { form { grid-template-columns: 1fr; } }
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.field.full { grid-column: 1 / -1; }
+label { font-size: .9rem; font-weight: 500; }
+input, select, textarea {
+  font: inherit; color: var(--ink); background: var(--paper);
+  border: 1px solid var(--line); border-radius: var(--radius); padding: 11px 12px; width: 100%;
+}
+textarea { min-height: 120px; resize: vertical; }
+input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+.consent { grid-column: 1 / -1; display: flex; gap: 10px; align-items: flex-start; font-size: .9rem; color: var(--muted); }
+.consent input { width: auto; margin-top: 4px; accent-color: var(--accent); }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.form-actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+.status { font-size: .94rem; }
+.status.ok { color: var(--ok); } .status.err { color: var(--err); }
+
+/* Footer */
+footer { padding-block: 36px 48px; font-size: .9rem; color: var(--muted); }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 18px; }
+footer .legal { display: grid; gap: 2px; }
+footer .legal b { color: var(--ink); font-weight: 600; }
+footer a { color: var(--muted); }
+
+/* WhatsApp float */
+.wa {
+  position: fixed; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 20;
+  width: 54px; height: 54px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: #1FA855; color: #FFFFFF; box-shadow: 0 6px 18px rgba(0,0,0,.18);
+}
+.wa:hover { filter: brightness(1.06); }
+</style>
+<!--BODY-->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="wheel" viewBox="0 0 32 32">
+      <g fill="none" stroke="currentColor" stroke-width="1.6">
+        <circle cx="16" cy="16" r="14.2"/>
+        <circle cx="16" cy="16" r="8.6"/>
+        <circle cx="16" cy="16" r="4.2"/>
+        <path d="M16 1.8V7.4M16 24.6v5.6M1.8 16h5.6M24.6 16h5.6M6 6l3.9 3.9M22.1 22.1L26 26M26 6l-3.9 3.9M9.9 22.1L6 26"/>
+        <path d="M16 7.4v1.2M16 23.4v1.2M7.4 16h1.2M23.4 16h1.2" stroke-width="2.2"/>
+      </g>
+      <circle cx="16" cy="16" r="1.6" fill="currentColor"/>
+    </symbol>
+    <symbol id="iso" viewBox="0 0 64 64">
+      <g style="color:var(--ink)">
+        <use href="#wheel" x="0" y="0" width="31" height="31"/>
+        <use href="#wheel" x="33" y="0" width="31" height="31"/>
+        <use href="#wheel" x="0" y="33" width="31" height="31"/>
+        <use href="#wheel" x="33" y="33" width="31" height="31"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#inicio" aria-label="Turing Robotics, inicio">
+      <img src="img/logo-turing-robotics.png" alt="Turing Robotics" width="162" height="40">
+    </a>
+    <nav class="nav" aria-label="Secciones">
+      <a class="link" href="#lineas">Líneas</a>
+      <a class="link" href="#proceso">Cómo trabajamos</a>
+      <a class="btn btn-primary" href="#cotizar">Solicitar cotización</a>
+    </nav>
+  </div>
+</header>
+
+<main id="inicio">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <h1>Robótica avanzada, importada y adaptada en Medellín</h1>
+        <p class="lead">Brazos robóticos y robots móviles de nivel investigación para universidades y laboratorios, y robots de servicio con carcasa propia para empresas. Nos encargamos de la importación, la adaptación y el soporte.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#cotizar">Solicitar cotización</a>
+          <a class="btn btn-ghost" href="#lineas">Ver líneas de producto</a>
+        </div>
+        <p class="where">Atendemos universidades, centros de investigación y empresas en toda Colombia.</p>
+      </div>
+
+      <figure class="drawing" aria-label="Diagrama cinemático de un brazo robótico de tres articulaciones con sus marcos de referencia">
+        <svg viewBox="0 0 420 340" role="img" aria-hidden="true">
+          <!-- floor -->
+          <line x1="40" y1="318" x2="390" y2="318" class="k-dim" style="stroke-dasharray:none"/>
+          <!-- base -->
+          <rect x="128" y="300" width="64" height="18" rx="2" class="k-base"/>
+          <!-- base frame -->
+          <g>
+            <line x1="62" y1="300" x2="104" y2="300" class="ax-x"/><polygon points="104,295 114,300 104,305" class="hx"/>
+            <line x1="62" y1="300" x2="62" y2="258" class="ax-z"/><polygon points="57,258 62,248 67,258" class="hz"/>
+            <line x1="62" y1="300" x2="84" y2="280" class="ax-y"/><polygon points="80,276 90,275 86,284" class="hy"/>
+            <text x="44" y="334" class="k-label">base_link</text>
+          </g>
+          <!-- arm -->
+          <g class="arm-upper">
+            <line x1="160" y1="300" x2="250" y2="168" class="k-link"/>
+            <g class="arm-fore">
+              <line x1="250" y1="168" x2="352" y2="140" class="k-link"/>
+              <line x1="352" y1="140" x2="352" y2="186" class="k-link" style="stroke-width:5"/>
+              <circle cx="352" cy="140" r="9" class="k-joint"/>
+              <!-- tool frame -->
+              <line x1="352" y1="196" x2="388" y2="196" class="ax-x"/><polygon points="388,191 398,196 388,201" class="hx"/>
+              <line x1="352" y1="196" x2="352" y2="232" class="ax-z"/><polygon points="347,232 352,242 357,232" class="hz"/>
+              <text x="362" y="232" class="k-label">tool0</text>
+              <text x="364" y="128" class="k-theta">θ3</text>
+            </g>
+            <circle cx="250" cy="168" r="10" class="k-joint"/>
+            <path d="M 272 168 A 22 22 0 0 0 268 156" class="k-arc"/>
+            <text x="262" y="150" class="k-theta">θ2</text>
+          </g>
+          <circle cx="160" cy="300" r="11" class="k-joint"/>
+          <path d="M 196 300 A 36 36 0 0 0 180 270" class="k-arc"/>
+          <text x="198" y="282" class="k-theta">θ1</text>
+          <!-- dimension -->
+          <line x1="160" y1="40" x2="352" y2="40" class="k-dim"/>
+          <line x1="160" y1="34" x2="160" y2="46" class="k-dim" style="stroke-dasharray:none"/>
+          <line x1="352" y1="34" x2="352" y2="46" class="k-dim" style="stroke-dasharray:none"/>
+          <text x="226" y="30" class="k-label">alcance</text>
+        </svg>
+        <figcaption><span>Cadena cinemática · 3 GDL</span><span>X Y Z: convención de ROS</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <section id="lineas">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Dos líneas de producto</h2>
+        <p>Equipos para investigar y equipos para trabajar. En ambos casos cotizamos con valor más IVA, incluimos la importación y damos soporte local.</p>
+      </div>
+      <div class="lines">
+        <article class="line-panel">
+          <span class="tag">Para universidades y laboratorios</span>
+          <h3>Plataformas de Investigación</h3>
+          <p>Hardware de nivel investigación, listo para experimentar en manipulación, navegación y visión. Trabajamos con productos de fabricantes como Seeed Studio y Yahboom, entre otros.</p>
+          <ul class="spec">
+            <li><span>Manipulación</span><span>Brazos robóticos de varios grados de libertad, con pinza y control desde ROS 2</span></li>
+            <li><span>Navegación</span><span>Robots móviles con LiDAR, odometría y mapeo</span></li>
+            <li><span>Percepción</span><span>Cámaras de profundidad y cómputo embebido para visión e IA</span></li>
+            <li><span>Uso típico</span><span>Laboratorios, semilleros de investigación, proyectos de grado y de I+D</span></li>
+          </ul>
+          <p class="foot">Le ayudamos a elegir la plataforma según el proyecto y el presupuesto.</p>
+        </article>
+        <article class="line-panel">
+          <span class="tag">Para empresas</span>
+          <h3>Robots de Servicio a la Medida</h3>
+          <p>Importamos la base robótica, diseñamos y fabricamos la carcasa en Medellín y adaptamos el robot a su operación.</p>
+          <ul class="spec">
+            <li><span>Base</span><span>Plataformas móviles importadas, seleccionadas por carga y autonomía</span></li>
+            <li><span>Carcasa</span><span>Diseño y fabricación propios, con la imagen de su empresa</span></li>
+            <li><span>Integración</span><span>Configuración, pruebas y puesta en marcha en sus instalaciones</span></li>
+            <li><span>Soporte</span><span>Mantenimiento y reparación locales</span></li>
+          </ul>
+          <p class="foot">Cada robot se cotiza según la aplicación.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="proceso" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Cómo trabajamos</h2>
+      </div>
+      <ol class="steps">
+        <li><span class="n">1</span><b>Nos cuenta qué necesita</b><p>El proyecto, la cantidad y el presupuesto aproximado.</p></li>
+        <li><span class="n">2</span><b>Recibe la cotización</b><p>Valor más IVA, tiempos de importación y condiciones de garantía.</p></li>
+        <li><span class="n">3</span><b>Importamos y adaptamos</b><p>Nacionalizamos el equipo, lo configuramos y lo probamos antes de entregarlo.</p></li>
+        <li><span class="n">4</span><b>Entregamos y damos soporte</b><p>Instalación, puesta en marcha y mantenimiento desde Medellín.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="reasons">
+        <div><b>Conocemos la robótica por dentro</b><p>Nuestro equipo tiene formación en robótica móvil, ROS 2 e inteligencia artificial, así que le recomendamos el equipo que su proyecto realmente necesita.</p></div>
+        <div><b>Sin trámites de importación para usted</b><p>Nos encargamos del proveedor, la aduana y la nacionalización. Usted recibe el equipo listo para usar.</p></div>
+        <div><b>Empresa formal en Colombia</b><p>Facturamos electrónicamente como sociedad registrada, con los documentos que piden las áreas de compras.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="quote" id="cotizar">
+    <div class="wrap">
+      <div>
+        <h2>Solicitar cotización</h2>
+        <p style="color:var(--muted);margin:0">Cuéntenos qué necesita y le enviamos la cotización a su correo.</p>
+        <div class="contact-alt">
+          <div><span>Correo de ventas</span><strong>ventas@turingrobotics.co</strong></div>
+          <div><span>WhatsApp</span><a href="https://wa.me/573188648150?text=Hola%2C%20quiero%20una%20cotizaci%C3%B3n" target="_blank" rel="noopener">+57 318 864 8150</a></div>
+        </div>
+      </div>
+
+      <form id="quote-form" novalidate>
+        <div class="field"><label for="f-name">Nombre</label><input id="f-name" name="nombre" autocomplete="name" required></div>
+        <div class="field"><label for="f-org">Universidad o empresa</label><input id="f-org" name="organizacion" autocomplete="organization" required></div>
+        <div class="field"><label for="f-email">Correo</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
+        <div class="field"><label for="f-phone">Teléfono o WhatsApp</label><input id="f-phone" name="telefono" type="tel" autocomplete="tel"></div>
+        <div class="field"><label for="f-line">¿Qué necesita?</label>
+          <select id="f-line" name="linea" required>
+            <option value="">Seleccione una opción</option>
+            <option>Plataforma de investigación</option>
+            <option>Robot de servicio a la medida</option>
+            <option>Repuestos o componentes</option>
+            <option>Mantenimiento o soporte</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="field"><label for="f-qty">Cantidad aproximada</label><input id="f-qty" name="cantidad" inputmode="numeric"></div>
+        <div class="field full"><label for="f-msg">Detalles del proyecto</label><textarea id="f-msg" name="mensaje" placeholder="Por ejemplo: dos brazos robóticos para el laboratorio de mecatrónica, entrega en el primer semestre."></textarea></div>
+        <input class="hp" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <label class="consent" for="f-consent"><input id="f-consent" type="checkbox" name="autorizacion" required>
+          <span>Autorizo a Turing Robotics S.A.S. a tratar mis datos personales para responder esta solicitud, según su <a href="privacidad.html">política de tratamiento de datos</a>.</span></label>
+        <div class="form-actions">
+          <button class="btn btn-primary" type="submit" id="f-submit">Solicitar cotización</button>
+          <span class="status" id="f-status" role="status" aria-live="polite"></span>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="legal">
+      <b>Turing Robotics S.A.S.</b>
+      <span>NIT 902.114.239-5</span>
+      <span>Medellín, Antioquia, Colombia</span>
+    </div>
+    <div class="legal">
+      <span>ventas@turingrobotics.co</span>
+      <span>+57 318 864 8150</span>
+      <a href="privacidad.html">Política de tratamiento de datos</a>
+    </div>
+  </div>
+</footer>
+
+<a class="wa" href="https://wa.me/573188648150?text=Hola%2C%20quiero%20una%20cotizaci%C3%B3n" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M16 3C8.8 3 3 8.7 3 15.8c0 2.5.7 4.9 2 7L3 29l6.4-2c2 1.1 4.3 1.7 6.6 1.7 7.2 0 13-5.7 13-12.8S23.2 3 16 3zm0 23.4c-2.1 0-4.1-.6-5.9-1.7l-.4-.3-3.8 1.2 1.2-3.7-.3-.4c-1.2-1.8-1.8-3.8-1.8-5.9C5 9.9 9.9 5.2 16 5.2s11 4.7 11 10.6-4.9 10.6-11 10.6zm6-7.9c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-1.9-1.8-2.2-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.4.3-.6.1-.2 0-.4 0-.6l-1-2.3c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.1-1.2 2.7s1.2 3.2 1.4 3.4c.2.2 2.4 3.6 5.8 5 .8.3 1.4.5 1.9.7.8.3 1.5.2 2.1.1.6-.1 1.9-.8 2.2-1.5.3-.7.3-1.4.2-1.5-.1-.2-.3-.3-.6-.4z"/></svg>
+</a>
+
+<script>
+(function () {
+  var form = document.getElementById('quote-form');
+  var status = document.getElementById('f-status');
+  var submit = document.getElementById('f-submit');
+  var ENDPOINT = 'https://formsubmit.co/ajax/ventas@turingrobotics.co';
+  var host = location.hostname;
+  var live = /turingrobotics\.co$/.test(host) || /\.pages\.dev$/.test(host);
+
+  function show(msg, kind) { status.textContent = msg; status.className = 'status ' + (kind || ''); }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (form.elements['_honey'].value) return;
+    var required = ['f-name', 'f-org', 'f-email', 'f-line'];
+    for (var i = 0; i < required.length; i++) {
+      var el = document.getElementById(required[i]);
+      if (!el.value.trim()) { el.focus(); show('Complete los campos de nombre, organización, correo y qué necesita.', 'err'); return; }
+    }
+    if (!form.elements['email'].checkValidity()) { form.elements['email'].focus(); show('Revise el correo: parece incompleto.', 'err'); return; }
+    if (!document.getElementById('f-consent').checked) { show('Para enviar la solicitud debe autorizar el tratamiento de datos.', 'err'); return; }
+
+    if (!live) { show('Vista previa: el formulario envía las solicitudes cuando la página está publicada en turingrobotics.co.', 'ok'); return; }
+
+    var data = new FormData(form);
+    data.append('_subject', 'Nueva solicitud de cotización: ' + (form.elements['linea'].value || 'web'));
+    data.append('_template', 'table');
+    submit.disabled = true; show('Enviando…');
+    fetch(ENDPOINT, { method: 'POST', body: data, headers: { 'Accept': 'application/json' } })
+      .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
+      .then(function () { form.reset(); show('Recibimos su solicitud. Le responderemos desde ventas@turingrobotics.co.', 'ok'); })
+      .catch(function () { show('No se pudo enviar. Escríbanos a ventas@turingrobotics.co o por WhatsApp.', 'err'); })
+      .then(function () { submit.disabled = false; });
+  });
+})();
+</script>
