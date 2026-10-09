@@ -446,7 +446,7 @@ footer a { color: var(--muted); }
   var submit = document.getElementById('f-submit');
   var ENDPOINT = 'https://formsubmit.co/ajax/ventas@turingrobotics.co';
   var host = location.hostname;
-  var live = /turingrobotics\.co$/.test(host) || /\.pages\.dev$/.test(host);
+  var live = /turingrobotics\.co$/.test(host) || /\.(pages|workers)\.dev$/.test(host);
 
   function show(msg, kind) { status.textContent = msg; status.className = 'status ' + (kind || ''); }
 
